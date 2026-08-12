@@ -1,0 +1,58 @@
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-pill text-sm font-bold transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  {
+    variants: {
+      variant: {
+        // Primary CTA — the Solar gradient. Use once per view.
+        solar:
+          "bg-gradient-solar text-navy shadow-cta-solar hover:brightness-105",
+        // Secondary CTA on light sections.
+        growth:
+          "bg-gradient-growth text-navy shadow-cta-growth hover:brightness-105",
+        // Outline — pairs with solar CTA on hero/dark sections.
+        outline:
+          "border-[1.5px] border-navy text-navy hover:bg-navy hover:text-warm-white",
+        "outline-light":
+          "border-[1.5px] border-warm-white text-warm-white hover:bg-warm-white hover:text-navy",
+        ghost:
+          "text-navy underline-offset-4 hover:underline hover:bg-transparent",
+      },
+      size: {
+        default: "h-11 px-6",
+        sm: "h-9 px-4 text-[13px]",
+        lg: "h-13 px-8 text-base",
+      },
+    },
+    defaultVariants: {
+      variant: "solar",
+      size: "default",
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = "Button";
+
+export { Button, buttonVariants };

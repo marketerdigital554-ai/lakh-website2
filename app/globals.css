@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --lakh-navy: #0b1730;
+  --lakh-navy-800: #122347;
+  --lakh-solar-yellow: #ffc629;
+  --lakh-solar-orange: #ff8a3d;
+  --lakh-energy-green: #22c55e;
+  --lakh-fresh-lime: #bef264;
+  --lakh-sky-cyan: #38bdf8;
+  --lakh-deep-blue: #2563eb;
+  --lakh-warm-white: #fffdf9;
+  --lakh-surface: #f4f1ea;
+  --lakh-border: #e7e2d6;
+  --lakh-text-primary: #0b1730;
+  --lakh-text-secondary: #5b6472;
+  --lakh-text-on-dark: #f4f1ea;
+}
+
+* {
+  border-color: var(--lakh-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--lakh-warm-white);
+  color: var(--lakh-text-primary);
+  font-feature-settings: "tnum" 1;
+}
+
+::selection {
+  background-color: var(--lakh-solar-yellow);
+  color: var(--lakh-navy);
+}
+
+/* Accessible focus ring — never rely on color alone; always a visible outline. */
+:focus-visible {
+  outline: 2px solid var(--lakh-deep-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Section background utilities so every page reads as one coherent journey. */
+.section-light {
+  background-color: var(--lakh-warm-white);
+  color: var(--lakh-text-primary);
+}
+
+.section-surface {
+  background-color: var(--lakh-surface);
+  color: var(--lakh-text-primary);
+}
+
+.section-dark {
+  background-color: var(--lakh-navy);
+  color: var(--lakh-text-on-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

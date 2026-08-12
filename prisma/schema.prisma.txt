@@ -1,0 +1,73 @@
+datasource db {
+  provider = "postgresql" // or "mysql" / "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id               String       @id @default(uuid())
+  phone            String       @unique
+  password         String
+  referralCode     String       @unique
+  referredById     String?
+  referredBy       User?        @relation("Referrals", fields: [referredById], references: [id])
+  referrals        User[]       @relation("Referrals")
+  
+  balance          Float        @default(0.0)
+  totalEarning     Float        @default(0.0)
+  role             Role         @default(USER)
+  
+  investments      Investment[]
+  transactions     Transaction[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+model Plan {
+  id            String       @id @default(uuid())
+  name          String
+  minPrice      Float
+  dailyYield    Float        // e.g. 5% per day
+  durationDays  Int          // e.g. 30 days
+  hourlyPayout  Boolean      @default(true)
+  investments   Investment[]
+}
+
+model Investment {
+  id            String       @id @default(uuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  planId        String
+  plan          Plan         @relation(fields: [planId], references: [id])
+  amount        Float
+  dailyProfit   Float
+  lastSettledAt DateTime     @default(now())
+  expiresAt     DateTime
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+}
+
+model Transaction {
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  type        String      // "DEPOSIT", "WITHDRAWAL", "YIELD", "COMMISSION"
+  amount      Float
+  status      Status      @default(PENDING)
+  txProof     String?     // Payment proof image or TRX ID
+  createdAt   DateTime    @default(now())
+}
